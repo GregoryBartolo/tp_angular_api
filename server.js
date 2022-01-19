@@ -41,8 +41,11 @@ let port = process.env.PORT || 8010;
 // les routes
 const prefix = '/api';
 
-app.route(prefix + '/assignments')
-  .get(assignment.getAssignments);
+app.route(prefix + '/assignments/rendus')
+  .get(assignment.getAssignmentsRendus);
+
+app.route(prefix + '/assignments/nonrendus')
+  .get(assignment.getAssignmentsNonRendus);
 
 app.route(prefix + '/assignments/lastid')
   .get(assignment.getLastId);

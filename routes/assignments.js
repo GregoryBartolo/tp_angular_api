@@ -2,8 +2,29 @@ const assignment = require('../model/assignment');
 let Assignment = require('../model/assignment');
 
 // Récupérer tous les assignments (GET)
-function getAssignments(req, res) {
-    var aggregateQuery = Assignment.aggregate();
+function getAssignmentsRendus(req, res) {
+    var aggregateQuery = Assignment.aggregate([
+        { $match: { rendu: true } }
+    ]);
+    Assignment.aggregatePaginate(aggregateQuery,
+        {
+            page: parseInt(req.query.page) || 1,
+            limit: parseInt(req.query.limit) || 10,
+            sort: { dateDeRendu: 'desc' }
+        },
+        (err, assignments) => {
+            if (err) {
+                res.send(err);
+            }
+            res.send(assignments);
+        }
+    );
+}
+
+function getAssignmentsNonRendus(req, res) {
+    var aggregateQuery = Assignment.aggregate([
+        { $match: { rendu: false } }
+    ]);
     Assignment.aggregatePaginate(aggregateQuery,
         {
             page: parseInt(req.query.page) || 1,
@@ -95,4 +116,4 @@ function getLastId(req, res) {
 
 
 
-module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment, getLastId };
+module.exports = { getAssignmentsRendus, getAssignmentsNonRendus, postAssignment, getAssignment, updateAssignment, deleteAssignment, getLastId };
