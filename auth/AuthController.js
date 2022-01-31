@@ -6,13 +6,13 @@ router.use(bodyParser.json());
 var User = require('../user/User');
 var VerifyToken = require('./VerifyToken');
 
+// import for jsonwebtoken
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
 
 router.post('/register', function(req, res) {
-  
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+    var hashedPassword = bcrypt.hashSync(req.body.password, 6);
     
     User.create({
       name : req.body.name,
